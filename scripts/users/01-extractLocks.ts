@@ -18,7 +18,6 @@ extractLocks()
     });
 
 export async function extractLocks() {
-
     const [deployer] = await ethers.getSigners();
     const chainName = getChainName(await deployer.getChainId());
 

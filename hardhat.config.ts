@@ -44,6 +44,10 @@ const config: HardhatUserConfig = {
       url: `https://rpc.moonriver.moonbeam.network`,
       accounts: [`0x${process.env.DEV_PRIVATE_KEY}`],
     },
+    iotex: {
+      url: `https://babel-api.mainnet.iotex.io`,
+      accounts: [`0x${process.env.DEV_PRIVATE_KEY}`],
+    },    
   },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY

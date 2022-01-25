@@ -2541,6 +2541,20 @@
         "block_number": "21502899"
     },
     {
+        "user": "0xE4c64158b37d92c4b9C780EC18a9F88d116995bb",
+        "lock_start": "1641692754",
+        "lock_end": "1643846400",
+        "hnd_amount": "63328289589724240393",
+        "block_number": "21503035"
+    },
+    {
+        "user": "0x77c2Da8140693996BE6bc72776cb1F04A77A4E68",
+        "lock_start": "1641694664",
+        "lock_end": "1767225600",
+        "hnd_amount": "91770000000000000000",
+        "block_number": "21503846"
+    },
+    {
         "user": "0x6517E7592d28927E7BA4f03Ab54079B527d6739D",
         "lock_start": "1641695105",
         "lock_end": "1767225600",

@@ -33,6 +33,10 @@ export function getChainName(id: number) {
         return "moonriver";
     }
 
+    if (id === 4689) {
+        return "iotex";
+    }   
+
     return "ethereum";
 }
 
