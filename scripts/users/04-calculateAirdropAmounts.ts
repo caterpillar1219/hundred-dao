@@ -2,7 +2,7 @@ import fs from "fs";
 import Balances from "./balances.json";
 import {mapToObj} from "./utils/helpers";
 
-const AirdropAmount = 18750 * 1e18
+const AirdropAmount = 938 / 2 * 1e18
 
 calculateAirdropAmounts()
     .then(() => process.exit(0))
