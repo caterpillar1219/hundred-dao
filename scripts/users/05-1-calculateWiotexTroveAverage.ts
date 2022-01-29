@@ -2030,18 +2030,18 @@ const WIOTEX_ABI =
       "type": "function"
     }
   ]
-const TROVE_MANAGER_ADDRESS = "0x366D48c04B0d315acF27Bd358558e92D4e2E9f3D"
+const BORROW_OPERATION_ADDRESS = "0xeaE44e0D1EB96fCAbcaD392fB9187dFe66562d8D"
 
 
 const getAverageBalances = async () => {
     const provider = new JsonRpcProvider("https://babel-api.mainnet.iotex.io");
-    const trove_manager = new ethers.Contract(TROVE_MANAGER_ADDRESS, WIOTEX_ABI, provider);
+    const bo = new ethers.Contract(BORROW_OPERATION_ADDRESS, WIOTEX_ABI, provider);
 
-    const deploymentBlock = 15237435 // 2022-01-10 Jan-10-2022 04:57:20 AM +UTC
+    const deploymentBlock = 15237433 // 2022-01-10T04:57:10.000Z
     const fromBlock = 15354761 //2022-01-17 Jan-17-2022 00:00:00 AM +UTC
     const toBlock = 15463658 //2022-01-24 Jan-24-2022 00:00:00 AM +UTC
 
-    const filter = trove_manager.filters.TroveUpdated();
+    const filter = bo.filters.TroveUpdated();
     const blockBatch = 100
     let currentFromBlock = deploymentBlock
     let currentToBlock = deploymentBlock + blockBatch
@@ -2053,7 +2053,7 @@ const getAverageBalances = async () => {
     const totalColl = new Map<string, BigNumber|undefined>();
     while (currentToBlock < toBlock) {
         try {
-            const events = await trove_manager.queryFilter(filter, currentFromBlock, currentToBlock);
+            const events = await bo.queryFilter(filter, currentFromBlock, currentToBlock);
             for (const e of events) {
                 const borrower: string = e.args?._borrower;
                 const coll: BigNumber = e.args?._coll;
@@ -2090,19 +2090,23 @@ const getAverageBalances = async () => {
 
     console.log("this is a test")
 
+    /*
     let airdropPrice: Map<string, number> = new Map<string, number>();
     for (const entry of totalColl.entries()) {
       if(entry[1]) airdropPrice.set(entry[0], entry[1].toNumber());
     }
 
     console.log("this is another test:", airdropPrice)
+    */
 
-    airdropPrice.forEach((v, k) => fs.appendFileSync("./scripts/users/wiotex_value.csv", `${k}, ${v / 7 / 1e18 * 0.0936}\n`));
+    totalColl.forEach((v, k) => fs.appendFileSync("./scripts/users/wiotex_amount.csv", `${k}, ${v}\n`));
+    
     /*
     fs.writeFileSync(`./scripts/users/wiotex_amount.json`,
         JSON.stringify(mapToObj(airdropPrice), null, 4)
     );
     */
+    
 }
 
 getAverageBalances() 
