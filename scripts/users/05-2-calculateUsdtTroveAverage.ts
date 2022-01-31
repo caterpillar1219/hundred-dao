@@ -774,7 +774,7 @@ const getAverageBalances = async () => {
     const toBlock = 15463658 //2022-01-24 Jan-24-2022 00:00:00 AM +UTC
 
     const filter = bo.filters.TroveUpdated();
-    const blockBatch = 100
+    const blockBatch = 1000
     let currentFromBlock = deploymentBlock
     let currentToBlock = deploymentBlock + blockBatch
     const snapshotNumber = 7;
@@ -831,7 +831,14 @@ const getAverageBalances = async () => {
     console.log("this is another test:", airdropPrice)
     */
 
-    totalColl.forEach((v, k) => fs.appendFileSync("./scripts/users/usdt_amount.csv", `${k}, ${v}\n`));
+    const balances = Array.from(totalColl, function (item) {
+      if(item[1])
+      return { user: item[0], balance: Math.round(item[1]?.toNumber() / 7 / 1e6).toString() }
+    });
+
+    fs.writeFileSync(`./scripts/users/balances/usdt.json`, JSON.stringify(balances, null, 4));
+
+    //totalColl.forEach((v, k) => fs.appendFileSync("./scripts/users/usdt_amount.csv", `${k}, ${v}\n`));
     
     /*
     fs.writeFileSync(`./scripts/users/wiotex_amount.json`,
