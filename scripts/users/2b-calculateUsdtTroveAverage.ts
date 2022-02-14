@@ -836,7 +836,7 @@ const getAverageBalances = async () => {
       return { user: item[0], balance: Math.round(item[1]?.toNumber() / 7 / 1e6).toString() }
     });
 
-    fs.writeFileSync(`./scripts/users/balances/usdt.json`, JSON.stringify(balances, null, 4));
+    fs.writeFileSync(`./scripts/users/trove_col_value/usdt.json`, JSON.stringify(balances, null, 4));
 
     //totalColl.forEach((v, k) => fs.appendFileSync("./scripts/users/usdt_amount.csv", `${k}, ${v}\n`));
     

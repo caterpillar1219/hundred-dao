@@ -2031,6 +2031,7 @@ const WIOTEX_ABI =
     }
   ]
 const BORROW_OPERATION_ADDRESS = "0xeaE44e0D1EB96fCAbcaD392fB9187dFe66562d8D"
+const price = 0.073 //wiotex price
 
 
 const getAverageBalances = async () => {
@@ -2101,10 +2102,10 @@ const getAverageBalances = async () => {
 
     const balances = Array.from(totalColl, function (item) {
       if(item[1])
-      return { user: item[0], balance: Math.round(item[1]?.div(1e9).div(1e9).toNumber() / 7 * 0.073).toString() }
+      return { user: item[0], balance: Math.round(item[1]?.div(1e9).div(1e9).toNumber() / 7 * price).toString() }
     });
 
-    fs.writeFileSync(`./scripts/users/balances/wiotex.json`, JSON.stringify(balances, null, 4));
+    fs.writeFileSync(`./scripts/users/trove_col_value/wiotex.json`, JSON.stringify(balances, null, 4));
 
 
 

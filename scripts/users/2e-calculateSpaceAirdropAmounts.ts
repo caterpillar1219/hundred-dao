@@ -1,8 +1,8 @@
 import fs from "fs";
-import Balances from "./balances.json";
+import Balances from "./troves_balances.json";
 import {mapToObj} from "./utils/helpers";
 
-const AirdropAmount = 938 / 2 * 1e18
+const AirdropAmount = 50000 * 1e18 // 50,000 space to trove owners each week, ~ 200,000 per month, 10% of 2M emission
 
 calculateAirdropAmounts()
     .then(() => process.exit(0))
@@ -26,7 +26,7 @@ async function calculateAirdropAmounts() {
 
     console.log(`Found ${airdropAmounts.size} users`)
 
-    fs.writeFileSync(`./scripts/users/airdrop.json`,
+    fs.writeFileSync(`./scripts/users/space_airdrop.json`,
         JSON.stringify(mapToObj(airdropAmounts), null, 4)
     );
 }
