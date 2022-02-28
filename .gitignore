@@ -8,7 +8,7 @@ reports/
 /scripts/deployment_config_prod.py
 /scripts/deployment_keys.py
 node_modules
-.env
 artifacts
 cache
 typechain
+.env
