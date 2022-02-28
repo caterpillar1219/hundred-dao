@@ -1,7 +1,6 @@
-import { ethers, BigNumber } from "ethers";
 import { JsonRpcProvider } from "@ethersproject/providers";
-import Airdrop from "./space_airdrop.json";
-
+import { ethers } from "ethers";
+import fs from "fs";
 
 
 const XIM_ABI = [
@@ -227,35 +226,45 @@ const XIM_ABI = [
     }
 ]
 
-const XIM_ADDRESS = "0x375488f097176507e39b9653b88fdc52cde736bf" // change this to SPACE ADDRESS
-const provider = new JsonRpcProvider("https://babel-api.mainnet.iotex.io");
-const wallet = new ethers.Wallet(`0x${process.env.DEV_PRIVATE_KEY}`)
-const walletSigner = wallet.connect(provider)
-const xim = new ethers.Contract(XIM_ADDRESS, XIM_ABI, walletSigner)
+const XIM_ADDRESS = "0xec690cdd448e3cbb51ed135df72301c3265a8f80"
+const MULTISIG_WALLET = "0xfBbeCD73d1feC645e477d4b7796349f73Dd4d5ab"
 
-const sendAirDrop = async () => {
-    for (const [address, tokens] of Object.entries(Airdrop)) {
-        await sendXimToken(address, tokens);
+const getAmount = async () => {
+    const provider = new JsonRpcProvider("https://babel-api.mainnet.iotex.io");
+    const xim_contract = new ethers.Contract(XIM_ADDRESS, XIM_ABI, provider);
+
+    const fromBlock = 15463658 //2022-01-24 00:00:00 AM +UTC
+    const toBlock = 15717147  //2022-02-07 00:00:00 AM +UTC
+
+    const filter = xim_contract.filters.Transfer();
+    const blockBatch = 1000
+    let currentFromBlock = fromBlock
+    let currentToBlock = fromBlock + blockBatch
+    const balances = new Map<any, any>();
+    while (currentToBlock < toBlock) {
+        try {
+            const events = await xim_contract.queryFilter(filter, currentFromBlock, currentToBlock);
+            for (const e of events) {
+                const from = e.args?.from;
+                const to = e.args?.to;
+                const value = e.args?.value;
+                if (from != MULTISIG_WALLET && to != MULTISIG_WALLET) continue;
+            //    console.log(from + " " + to + " " + value);
+            //    fs.appendFileSync("xim_amount.csv", `${from}, ${to}, ${value}\n`)
+
+                balances.set(from, (balances.has(from)? balances.get(from):0) - value / 1e18);
+                balances.set(to, (balances.has(to)? balances.get(to):0) + value / 1e18);
+                console.log(from + " " + to + " " + value / 1e18);
+            }
+        }
+        catch (error) {
+            if (error) continue;
+        }
+        // console.log("current:" + currentToBlock)
+        currentFromBlock = currentToBlock
+        currentToBlock += blockBatch
     }
-    console.log('All finished!')
+    balances.forEach((v, k) => fs.appendFileSync("./scripts/users0207/xim_amount.csv", `${k}, ${v}\n`));
 }
 
-const sendXimToken = async (
-    to_address: string,
-    send_token_amount: string,
-) => {
-    let numberOfTokens = BigNumber.from(send_token_amount)
-    console.log(`numberOfTokens: ${numberOfTokens}`)
-
-    // Send tokens
-    const tx = await xim.transfer(to_address, numberOfTokens);
-    await tx.wait();
-    console.dir(tx);
-}
-
-sendAirDrop().then(() => process.exit(0))
-.catch(error => {
-    console.error(error);
-    process.exit(1);
-});
-
+getAmount() 

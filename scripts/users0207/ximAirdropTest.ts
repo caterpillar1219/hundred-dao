@@ -1,6 +1,6 @@
 import { ethers, BigNumber } from "ethers";
 import { JsonRpcProvider } from "@ethersproject/providers";
-import Airdrop from "./space_airdrop.json";
+import Airdrop from "./airdropTest.json";
 
 
 
@@ -72,7 +72,7 @@ const XIM_ABI = [
                 "type": "uint256"
             }
         ],
-        "name": "transferFrom",
+        "name": "transferFrom",s
         "outputs": [
             {
                 "name": "",
@@ -227,11 +227,15 @@ const XIM_ABI = [
     }
 ]
 
-const XIM_ADDRESS = "0x375488f097176507e39b9653b88fdc52cde736bf" // change this to SPACE ADDRESS
+// usdt as test token
+const XIM_ADDRESS = "0x6fbcdc1169b5130c59e72e51ed68a84841c98cd1"
 const provider = new JsonRpcProvider("https://babel-api.mainnet.iotex.io");
+// const send_account = "0x93C7699d27825AA3EA5b2c7C3e4b25Bc46Bf9296"
+// const gas_limit = "0x100000"
 const wallet = new ethers.Wallet(`0x${process.env.DEV_PRIVATE_KEY}`)
 const walletSigner = wallet.connect(provider)
 const xim = new ethers.Contract(XIM_ADDRESS, XIM_ABI, walletSigner)
+
 
 const sendAirDrop = async () => {
     for (const [address, tokens] of Object.entries(Airdrop)) {
@@ -244,6 +248,7 @@ const sendXimToken = async (
     to_address: string,
     send_token_amount: string,
 ) => {
+
     let numberOfTokens = BigNumber.from(send_token_amount)
     console.log(`numberOfTokens: ${numberOfTokens}`)
 
@@ -253,9 +258,29 @@ const sendXimToken = async (
     console.dir(tx);
 }
 
-sendAirDrop().then(() => process.exit(0))
-.catch(error => {
-    console.error(error);
-    process.exit(1);
-});
+// const data = contract.transfer.getData(to_address, 10000, {from: send_account});
+// const tx = {
+//     from: send_account,
+//     to: to_address,
+//     value: ethers.utils.parseEther(send_token_amount),
+//     nonce: provider.getTransactionCount(
+//     send_account,
+//     "latest"
+//     ),
+//     "data": data,
+//     gasLimit: ethers.utils.hexlify(gas_limit), // 100000
+//     gasPrice: gas_price,
+// }
+
+
+
+// Send tokens
+// contract.transfer(to_address, numberOfTokens).then((tx: any) => {
+//     console.dir(tx)
+//     alert("sent token")
+// })
+
+
+
+sendAirDrop()
 

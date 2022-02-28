@@ -1,6 +1,6 @@
 import { ethers, BigNumber } from "ethers";
 import { JsonRpcProvider } from "@ethersproject/providers";
-import Airdrop from "./space_airdrop.json";
+import Airdrop from "./xim_airdrop.json";
 
 
 
@@ -227,7 +227,7 @@ const XIM_ABI = [
     }
 ]
 
-const XIM_ADDRESS = "0x375488f097176507e39b9653b88fdc52cde736bf" // change this to SPACE ADDRESS
+const XIM_ADDRESS = "0xec690cdd448e3cbb51ed135df72301c3265a8f80"
 const provider = new JsonRpcProvider("https://babel-api.mainnet.iotex.io");
 const wallet = new ethers.Wallet(`0x${process.env.DEV_PRIVATE_KEY}`)
 const walletSigner = wallet.connect(provider)
